@@ -193,3 +193,24 @@ def update_customer(customer_id):
         if 'email' in data and (not data['email'].strip() or '@' not in data['email']):
             return jsonify({'error': 'Invalid email format'}), 400
         if 'phone' in data and not data['phone'].strip():
+            return jsonify({'error': 'Phone number cannot be empty'}), 400
+        
+        customer = data_manager.update_customer(customer_id, data)
+        if customer:
+            return jsonify(customer)
+        return jsonify({'error': 'Customer not found'}), 404
+    except Exception as e:
+        logging.error(f"Error updating customer {customer_id}: {str(e)}")
+        return jsonify({'error': 'Failed to update customer'}), 500
+
+app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
+def d@elete_customer(customer_id):
+    """Delete a customer"""
+    try:
+        if data_manager.delete_customer(customer_id):
+            return jsonify({'message': 'Customer deleted successfully'})
+        return jsonify({'error': 'Customer not found'}), 404
+    except Exception as e:
+        logging.error(f"Error deleting customer {customer_id}: {str(e)}")
+        return jsonify({'error': 'Failed to delete customer'}), 500
+                        
