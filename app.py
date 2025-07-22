@@ -214,3 +214,92 @@ def d@elete_customer(customer_id):
         logging.error(f"Error deleting customer {customer_id}: {str(e)}")
         return jsonify({'error': 'Failed to delete customer'}), 500
                         
+# API Routes for Statistics and Reports
+@app.route('/api/stats/summary', methods=['GET'])
+def get_summary_stats():
+    """Get summary statistics"""
+    try:
+        products = data_manager.get_all_products()
+        customers = data_manager.get_all_customers()
+        
+        # Calculate statistics
+        total_products = len(products)
+        total_customers = len(customers)
+        low_stock_items = len([p for p in products if p['stock'] <= 5])
+        total_inventory_value = sum(p['price'] * p['stock'] for p in products)
+        
+        # Find most expensive and cheapest products
+        most_expensive = max(products, key=lambda x: x['price']) if products else None
+        cheapest = min(products, key=lambda x: x['price']) if products else None
+        
+        stats = {
+            'total_products': total_products,
+            'total_customers': total_customers,
+            'low_stock_items': low_stock_items,
+            'total_inventory_value': round(total_inventory_value, 2),
+            'most_expensive_product': most_expensive,
+            'cheapest_product': cheapest,
+            'average_price': round(sum(p['price'] for p in products) / len(products), 2) if products else 0,
+            'recent_products': products[-5:] if len(products) >= 5 else products,
+            'recent_customers': customers[-5:] if len(customers) >= 5 else customers
+        }
+        
+        return jsonify(stats)
+    except Exception as e:
+        logging.error(f"Error getting summary stats: {str(e)}")
+        return jsonify({'error': 'Failed to retrieve statistics'}), 500
+
+@app.route('/api/products/search', methods=['GET'])
+def search_products():
+    """Search products by name"""
+    try:
+        query = request.args.get('q', '').lower()
+        sort_by = request.args.get('sort', 'name')
+        
+        products = data_manager.get_all_products()
+        
+        # Filter by search query
+        if query:
+            products = [p for p in products if query in p['name'].lower()]
+        
+        # Sort products
+        if sort_by == 'price':
+            products.sort(key=lambda x: x['price'])
+        elif sort_by == 'stock':
+            products.sort(key=lambda x: x['stock'])
+        else:  # name
+            products.sort(key=lambda x: x['name'].lower())
+        
+        return jsonify(products)
+    except Exception as e:
+        logging.error(f"Error searching products: {str(e)}")
+        return jsonify({'error': 'Failed to search products'}), 500
+
+@app.route('/api/customers/search', methods=['GET'])
+def search_customers():
+    """Search customers by name or email"""
+    try:
+        query = request.args.get('q', '').lower()
+        sort_by = request.args.get('sort', 'name')
+        
+        customers = data_manager.get_all_customers()
+        
+        # Filter by search query
+        if query:
+            customers = [c for c in customers if query in c['name'].lower() or query in c['email'].lower()]
+        
+        # Sort customers
+        if sort_by == 'email':
+            customers.sort(key=lambda x: x['email'].lower())
+        elif sort_by == 'phone':
+            customers.sort(key=lambda x: x['phone'])
+        else:  # name
+            customers.sort(key=lambda x: x['name'].lower())
+        
+        return jsonify(customers)
+    except Exception as e:
+        logging.error(f"Error searching customers: {str(e)}")
+        return jsonify({'error': 'Failed to search customers'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
