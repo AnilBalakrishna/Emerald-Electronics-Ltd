@@ -257,3 +257,150 @@ if (!response.ok) {
         }
     }
 
+searchCustomers() {
+        const query = document.getElementById('customerSearch').value.toLowerCase();
+        this.filteredCustomers = this.allCustomers.filter(customer => 
+            customer.name.toLowerCase().includes(query) || 
+            customer.email.toLowerCase().includes(query)
+        );
+        this.sortCustomers();
+    }
+
+    sortCustomers() {
+        const sortBy = document.getElementById('customerSort').value;
+        this.filteredCustomers.sort((a, b) => {
+            if (sortBy === 'email') {
+                return a.email.localeCompare(b.email);
+            } else if (sortBy === 'phone') {
+                return a.phone.localeCompare(b.phone);
+            } else {
+                return a.name.localeCompare(b.name);
+            }
+        });
+        this.renderCustomers(this.filteredCustomers);
+    }
+
+    renderCustomers(customers) {
+        const tbody = document.getElementById('customersTableBody');
+        
+        if (customers.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No customers found. Add your first customer to get started.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = customers.map(customer => `
+            <tr>
+                <td>${customer.id}</td>
+                <td>${customer.name}</td>
+                <td>${customer.email}</td>
+                <td>${customer.phone}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="app.editCustomer(${customer.id})">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="app.deleteCustomer(${customer.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async handleCustomerSubmit() {
+        const form = document.getElementById('customerForm');
+        const formData = new FormData(form);
+        
+        const customerData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone')
+        };
+
+        try {
+            if (this.currentEditingCustomer) {
+                // Update existing customer
+                await this.apiRequest(`/api/customers/${this.currentEditingCustomer}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(customerData)
+                });
+                this.showAlert('customersAlert', 'Customer updated successfully!', 'success');
+            } else {
+                // Create new customer
+                await this.apiRequest('/api/customers', {
+                    method: 'POST',
+                    body: JSON.stringify(customerData)
+                });
+                this.showAlert('customersAlert', 'Customer added successfully!', 'success');
+            }
+
+            this.customerModal.hide();
+            this.loadCustomers();
+        } catch (error) {
+            this.showAlert('customersAlert', `Failed to save customer: ${error.message}`);
+        }
+    }
+
+    async editCustomer(customerId) {
+        try {
+            const customer = await this.apiRequest(`/api/customers/${customerId}`);
+            
+            // Fill form with customer data
+            document.getElementById('customerId').value = customer.id;
+            document.getElementById('customerName').value = customer.name;
+            document.getElementById('customerEmail').value = customer.email;
+            document.getElementById('customerPhone').value = customer.phone;
+            
+            // Update modal for editing mode
+            this.currentEditingCustomer = customerId;
+            document.getElementById('customerModalLabel').textContent = 'Edit Customer';
+            document.getElementById('customerSubmitBtn').textContent = 'Update Customer';
+
+        // Show modal
+            this.customerModal.show();
+        } catch (error) {
+            this.showAlert('customersAlert', `Failed to load customer: ${error.message}`);
+        }
+    }
+
+    async deleteCustomer(customerId) {
+        if (!confirm('Are you sure you want to delete this customer?')) {
+            return;
+        }
+
+        try {
+            await this.apiRequest(`/api/customers/${customerId}`, {
+                method: 'DELETE'
+            });
+            this.showAlert('customersAlert', 'Customer deleted successfully!', 'success');
+            this.loadCustomers();
+        } catch (error) {
+            this.showAlert('customersAlert', `Failed to delete customer: ${error.message}`);
+        }
+    }
+}
+
+// Initialize the app when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new EmeraldElectronicsApp();
+});
+
+// Global functions for search and sort (called from HTML)
+function searchProducts() {
+    if (window.app) {
+        window.app.searchProducts();
+    }
+}
+
+function sortProducts() {
+    if (window.app) {
+        window.app.sortProducts();
+    }
+}
+
+function searchCustomers() {
+    if (window.app) {
+        window.app.searchCustomers();
+    }
+}
+
+function sortCustomers() {
+    if (window.app) {
+        window.app.sortCustomers();
+    }
+}
