@@ -18,4 +18,105 @@
     "stock": 5
   },
   {
-    
+    "id": 4,
+    "name": "Sony WH-1000XM4 Headphones",
+    "price": 349.99,
+    "stock": 22
+  },
+  {
+    "id": 5,
+    "name": "iPad Air 5th Gen",
+    "price": 749.99,
+    "stock": 12
+  },
+  {
+    "id": 6,
+    "name": "MacBook Pro 14-inch",
+    "price": 2199.99,
+    "stock": 3
+  },
+  {
+    "id": 7,
+    "name": "Google Pixel 7",
+    "price": 599.99,
+    "stock": 18
+  },
+  {
+    "id": 8,
+    "name": "Nintendo Switch OLED",
+    "price": 349.99,
+    "stock": 25
+  },
+  {
+    "id": 9,
+    "name": "AirPods Pro 2nd Gen",
+    "price": 279.99,
+    "stock": 30
+  },
+  {
+    "id": 10,
+    "name": "Samsung 4K Monitor 27-inch",
+    "price": 449.99,
+    "stock": 7
+  },
+  {
+    "id": 11,
+    "name": "HP Wireless Mouse",
+    "price": 29.99,
+    "stock": 45
+  },
+  {
+    "id": 12,
+    "name": "Logitech Mechanical Keyboard",
+    "price": 129.99,
+    "stock": 16
+  },
+  {
+    "id": 13,
+    "name": "Canon EOS R5 Camera",
+    "price": 3899.99,
+    "stock": 2
+  },
+  {
+    "id": 14,
+    "name": "JBL Bluetooth Speaker",
+    "price": 149.99,
+    "stock": 20
+  },
+  {
+    "id": 15,
+    "name": "Fitbit Versa 4",
+    "price": 199.99,
+    "stock": 14
+  },
+  {
+    "id": 16,
+    "name": "Electric Wires Bundle",
+    "price": 25.0,
+    "stock": 25
+  },
+  {
+    "id": 17,
+    "name": "LCD Display Panel",
+    "price": 450.0,
+    "stock": 24
+  },
+  {
+    "id": 18,
+    "name": "Raspberry Pi 4",
+    "price": 89.99,
+    "stock": 4
+  },
+  {
+    "id": 19,
+    "name": "USB-C Cable",
+    "price": 19.99,
+    "stock": 55
+  },
+  {
+    "id": 20,
+    "name": "Wireless Charger",
+    "price": 39.99,
+    "stock": 28
+  }
+]
