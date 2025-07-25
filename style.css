@@ -96,3 +96,82 @@
 .form-control:valid {
     border-color: #198754;
 }
+
+.form-control:valid:focus {
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+/* Header styling */
+.text-primary {
+    color: #0d6efd !important;
+}
+
+/* Button hover effects */
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-danger:hover {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Empty state styling */
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Success and error styling */
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+/* Table hover effect */
+.table-striped tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Utility classes */
+.me-1 {
+    margin-right: 0.25rem;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+/* Custom focus styles */
+.btn:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Responsive table */
+@media (max-width: 576px) {
+    .table th,
+    .table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+    }
+}
