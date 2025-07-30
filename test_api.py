@@ -196,3 +196,63 @@ class TestAPI(unittest.TestCase):
             'stock': 5
         }
         
+        response = self.client.post('/api/products', 
+                                  data=json.dumps(product_data),
+                                  content_type='application/json')
+        
+        self.assertEqual(response.status_code, 201)
+        product = json.loads(response.data)
+        
+        # Create a customer
+        customer_data = {
+            'name': 'Alice Johnson',
+            'email': 'alice@example.com',
+            'phone': '087-123-4567'
+        }
+
+response = self.client.post('/api/customers', 
+                                  data=json.dumps(customer_data),
+                                  content_type='application/json')
+        
+        self.assertEqual(response.status_code, 201)
+        customer = json.loads(response.data)
+        
+        # Read both
+        response = self.client.get('/api/products')
+        products = json.loads(response.data)
+        self.assertEqual(len(products), 1)
+        
+        response = self.client.get('/api/customers')
+        customers = json.loads(response.data)
+        self.assertEqual(len(customers), 1)
+        
+        # Update both
+        response = self.client.put(f'/api/products/{product["id"]}', 
+                                 data=json.dumps({'price': 899.99}),
+                                 content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.put(f'/api/customers/{customer["id"]}', 
+                                 data=json.dumps({'phone': '087-999-8888'}),
+                                 content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        
+        # Delete both
+        response = self.client.delete(f'/api/products/{product["id"]}')
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.delete(f'/api/customers/{customer["id"]}')
+        self.assertEqual(response.status_code, 200)
+        
+        # Verify deletion
+        response = self.client.get('/api/products')
+        products = json.loads(response.data)
+        self.assertEqual(len(products), 0)
+        
+        response = self.client.get('/api/customers')
+        customers = json.loads(response.data)
+        self.assertEqual(len(customers), 0)
+
+if __name__ == '__main__':
+    unittest.main()
+  
