@@ -132,3 +132,56 @@ class TestDataManager(unittest.TestCase):
         customer = self.data_manager.get_customer(999)
         self.assertIsNone(customer)
     
+    def test_update_customer(self):
+        """Test updating a customer"""
+        # Create a customer
+        created_customer = self.data_manager.create_customer("John Doe", "john@example.com", "123-456-7890")
+        
+        # Update the customer
+        updates = {"name": "John Smith", "email": "johnsmith@example.com"}
+        updated_customer = self.data_manager.update_customer(created_customer['id'], updates)
+        
+        self.assertIsNotNone(updated_customer)
+        self.assertEqual(updated_customer['name'], "John Smith")
+        self.assertEqual(updated_customer['email'], "johnsmith@example.com")
+        self.assertEqual(updated_customer['phone'], "123-456-7890")  # Unchanged
+        
+        # Non-existent customer
+        result = self.data_manager.update_customer(999, updates)
+        self.assertIsNone(result)
+    
+    def test_delete_customer(self):
+        """Test deleting a customer"""
+        # Create a customer
+        created_customer = self.data_manager.create_customer("John Doe", "john@example.com", "123-456-7890")
+        
+        # Delete the customer
+        result = self.data_manager.delete_customer(created_customer['id'])
+        self.assertTrue(result)
+        
+        # Verify deletion
+        customer = self.data_manager.get_customer(created_customer['id'])
+        self.assertIsNone(customer)
+        
+        # Non-existent customer
+        result = self.data_manager.delete_customer(999)
+        self.assertFalse(result)
+    
+    def test_id_generation(self):
+        """Test that IDs are generated correctly"""
+        # Create products
+        product1 = self.data_manager.create_product("Product 1", 10.00, 5)
+        product2 = self.data_manager.create_product("Product 2", 20.00, 3)
+        
+        self.assertEqual(product1['id'], 1)
+        self.assertEqual(product2['id'], 2)
+        
+        # Delete first product
+        self.data_manager.delete_product(product1['id'])
+        
+        # Create another product - should get ID 3, not reuse 1
+        product3 = self.data_manager.create_product("Product 3", 30.00, 7)
+        self.assertEqual(product3['id'], 3)
+
+if __name__ == '__main__':
+    unittest.main()
