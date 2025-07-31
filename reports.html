@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Emerald Electronics Ltd</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Emerald Electronics Ltd</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('index') }}">Manage Data</a>
+                <a class="nav-link active" href="{{ url_for('reports') }}">Reports</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>System Reports</h2>
+                <p class="text-muted">Analytics and reporting for Emerald Electronics Ltd</p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Inventory Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="sortBy" class="form-label">Sort By:</label>
+                                <select class="form-select" id="sortBy">
+                                    <option value="name">Product Name</option>
+                                    <option value="price">Price</option>
+                                    <option value="stock">Stock Level</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="filterStock" class="form-label">Filter by Stock:</label>
+                                <select class="form-select" id="filterStock">
+                                    <option value="all">All Items</option>
+                                    <option value="low">Low Stock (≤5)</option>
+                                    <option value="medium">Medium Stock (6-20)</option>
+                                    <option value="high">High Stock (>20)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mb-3" onclick="generateInventoryReport()">Generate Report</button>
+                        <div id="inventoryReport">
+                            <div class="text-center">
+                                <p class="text-muted">Click "Generate Report" to view inventory data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Customer Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="searchCustomer" class="form-label">Search Customer:</label>
+                                <input type="text" class="form-control" id="searchCustomer" placeholder="Enter customer name or email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sortCustomers" class="form-label">Sort By:</label>
+                                <select class="form-select" id="sortCustomers">
+                                    <option value="name">Customer Name</option>
+                                    <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-success mb-3" onclick="generateCustomerReport()">Generate Report</button>
+                        <div id="customerReport">
+                            <div class="text-center">
+                                <p class="text-muted">Click "Generate Report" to view customer data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Summary Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-info mb-3" onclick="generateSummaryReport()">Generate Summary</button>
+                        <div id="summaryReport">
+                            <div class="text-center">
+                                <p class="text-muted">Click "Generate Summary" to view system statistics</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='reports.js') }}"></script>
+</body>
+</html>
